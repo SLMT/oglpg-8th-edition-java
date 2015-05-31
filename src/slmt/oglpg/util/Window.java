@@ -47,7 +47,7 @@ public class Window {
 	// An OpenGL rendering task
 	private OpenGLTask task;
 
-	public Window(OpenGLTask task) {
+	public Window(OpenGLTask task, int width, int height) {
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		glfwSetErrorCallback(errorCallback = errorCallbackPrint(System.err));
@@ -63,11 +63,8 @@ public class Window {
 												// after creation
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
 
-		int WIDTH = 800;
-		int HEIGHT = 600;
-
 		// Create the window
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+		window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
 		if (window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
 
@@ -77,19 +74,17 @@ public class Window {
 			@Override
 			public void invoke(long window, int key, int scancode, int action,
 					int mods) {
+				// We will detect this in our rendering loop
 				if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-					glfwSetWindowShouldClose(window, GL_TRUE); // We will detect
-																// this in our
-																// rendering
-																// loop
+					glfwSetWindowShouldClose(window, GL_TRUE); 
 			}
 		});
 
 		// Get the resolution of the primary monitor
 		ByteBuffer vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		// Center our window
-		glfwSetWindowPos(window, (GLFWvidmode.width(vidmode) - WIDTH) / 2,
-				(GLFWvidmode.height(vidmode) - HEIGHT) / 2);
+		glfwSetWindowPos(window, (GLFWvidmode.width(vidmode) - width) / 2,
+				(GLFWvidmode.height(vidmode) - height) / 2);
 
 		// Make the OpenGL context current
 		glfwMakeContextCurrent(window);
